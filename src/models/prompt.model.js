@@ -1,23 +1,19 @@
-import { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
 const PromptSchema = new Schema({
-  email: {
+  prompt: {
     type: String,
-    unique: [true, "Email Already Exist"],
-    required: [true, "Email is Required"],
+    required: [true, "Prompt is Required"],
   },
-  username: {
-    type: String,
-    required: [true, "Username is required!"],
-    match: [
-      /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
-      "Username invalid, it should contain 8-20 alphanumeric letters and be unique!",
-    ],
+  creator: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
   },
-  image: {
+  tag: {
     type: String,
+    required: [true, "Tag is Required"],
   },
 });
 
 const Prompt = models.Prompt || model("Prompt", PromptSchema);
-export default User;
+export default Prompt;
