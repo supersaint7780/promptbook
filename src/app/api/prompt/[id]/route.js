@@ -1,5 +1,6 @@
 import Prompt from "@/models/prompt.model";
 import { connectToDB } from "@/utils/database";
+import { revalidatePath } from "next/cache";
 
 export const GET = async (request, { params }) => {
   try {
@@ -32,7 +33,7 @@ export const PATCH = async (request, { params }) => {
     existingPrompt.tag = tag;
 
     await existingPrompt.save();
-
+    revalidatePath('/');
     return new Response("Successfully updated the Prompts", { status: 200 });
   } catch (error) {
     return new Response("Error Updating Prompt", { status: 500 });
@@ -49,7 +50,7 @@ export const DELETE = async (request, { params }) => {
 
     // Find the prompt by ID and remove it
     await Prompt.findByIdAndDelete(params.id);
-
+    revalidatePath('/');
     return new Response("Prompt deleted successfully", { status: 200 });
   } catch (error) {
     return new Response("Error deleting prompt", { status: 500 });
